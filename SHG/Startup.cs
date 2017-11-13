@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using SHG.Data;
 
 namespace SHG
 {
@@ -23,7 +25,21 @@ namespace SHG
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ElectContext>(options =>
+                options.UseSqlServer(connection));
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", p =>
+                {
+                    p.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,7 +49,7 @@ namespace SHG
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("AllowAll");
             app.UseMvc();
         }
     }

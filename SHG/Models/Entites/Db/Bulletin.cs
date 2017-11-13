@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SHG.Models.Filters
+namespace SHG.Models.Entites
 {
-    public class IncomeVote
+    public class Bulletin
     {
-        public string Signature { get; set; }
+        public int ID { get; set; }
+
+        public int VoterId { get; set; }
 
         public string Data { get; set; }
     }
