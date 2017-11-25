@@ -9,16 +9,19 @@ using System.Text;
 using SHG.Models.Api.Input;
 using SHG.Data;
 using SHG.Models;
+using Org.BouncyCastle.Math;
 
 namespace SHG.Controllers
 {
     [Route("api/shg")]
     public class ApiController : Controller
     {
+        private Config config;
         private ElectContext electContext;
 
-        public ApiController(ElectContext electContext)
+        public ApiController(Config config, ElectContext electContext)
         {
+            this.config = config;
             this.electContext = electContext;
         }
 
@@ -30,13 +33,22 @@ namespace SHG.Controllers
                 DigitalSignature ds = new DigitalSignature();
                 if (ds.Verify(filter.Data, filter.Signature, filter.SignatureModulus, filter.SignaturePubExponent))
                 {
-                    Bulletins bulletinModel = new Bulletins(electContext);
+                    Bulletins bulletinModel = new Bulletins(config, electContext);
                     if (bulletinModel.saveBulletin(filter.UserId, filter.Data))
                     {
                         return Ok();
                     }
                 }
             }
+            return BadRequest();
+        }
+
+        [HttpPost("send-to-mix")]
+        public IActionResult SendBulletinsToMix()
+        {
+            Bulletins bulletinModel = new Bulletins(config, electContext);
+            if (bulletinModel.sendBulletinsToMix())
+                return Ok();
             return BadRequest();
         }
     }
