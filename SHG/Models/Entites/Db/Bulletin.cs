@@ -9,7 +9,7 @@ namespace SHG.Models.Entites
     {
         public int ID { get; set; }
 
-        public int VoterId { get; set; }
+        public string UserLik { get; set; }
 
         public string Data { get; set; }
     }

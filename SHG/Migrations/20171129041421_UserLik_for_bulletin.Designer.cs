@@ -11,9 +11,10 @@ using System;
 namespace SHG.Migrations
 {
     [DbContext(typeof(ElectContext))]
-    partial class ElectContextModelSnapshot : ModelSnapshot
+    [Migration("20171129041421_UserLik_for_bulletin")]
+    partial class UserLik_for_bulletin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -23,12 +23,12 @@ namespace SHG.Models
             this.electContext = electContext;
         }
 
-        public bool saveBulletin (int voterId, string bulletinData)
+        public bool saveBulletin (string userLik, string bulletinData)
         {
-            if (electContext.Bulletins.SingleOrDefault(b => b.VoterId == voterId) == null)
+            if (electContext.Bulletins.SingleOrDefault(b => b.UserLik == userLik) == null)
             {
                 Bulletin bulletin = new Bulletin();
-                bulletin.VoterId = voterId;
+                bulletin.UserLik = userLik;
                 bulletin.Data = bulletinData;
                 electContext.Bulletins.Add(bulletin);
                 electContext.SaveChanges();

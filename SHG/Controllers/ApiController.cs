@@ -10,6 +10,7 @@ using SHG.Models.Api.Input;
 using SHG.Data;
 using SHG.Models;
 using Org.BouncyCastle.Math;
+using SHG.Models.Entites;
 
 namespace SHG.Controllers
 {
@@ -34,7 +35,7 @@ namespace SHG.Controllers
                 if (ds.Verify(filter.Data, filter.Signature, filter.SignatureModulus, filter.SignaturePubExponent))
                 {
                     Bulletins bulletinModel = new Bulletins(config, electContext);
-                    if (bulletinModel.saveBulletin(filter.UserId, filter.Data))
+                    if (bulletinModel.saveBulletin(filter.UserLik, filter.Data))
                     {
                         return Ok();
                     }
@@ -50,6 +51,27 @@ namespace SHG.Controllers
             if (bulletinModel.sendBulletinsToMix())
                 return Ok();
             return BadRequest();
+        }
+
+        [HttpGet("bulletin-board")]
+        public IActionResult BulletinBoard()
+        {
+            List<Bulletin> bulletins = electContext.Bulletins.ToList();
+            var LikHashList = new List<Object>();
+            HashAlgorithm algorithm = SHA1.Create();
+            foreach (Bulletin bulletin in bulletins)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (byte b in algorithm.ComputeHash(Encoding.UTF8.GetBytes(bulletin.Data)))
+                    sb.Append(b.ToString("X2"));
+                LikHashList.Add(new
+                {
+                    LIK = bulletin.UserLik,
+                    VoteHash = sb.ToString()
+                }
+                );
+            }
+            return View("BulletinBoard");
         }
     }
 }

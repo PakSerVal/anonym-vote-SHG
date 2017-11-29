@@ -1,0 +1,15 @@
+﻿@model Dictionary<string, string>
+@{
+}
+
+<table border="5">
+    <tr><th>LIK</th><th>Vote Hash</th></tr>
+    @foreach (KeyValuePair<string, string> entry in Model)
+    {
+        <tr>
+            <td>@entry.Key</td>
+            <td>@entry.Value</td>
+        </tr>
+    }
+</table>
+

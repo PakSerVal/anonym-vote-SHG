@@ -7,7 +7,7 @@ namespace SHG.Models.Api.Input
 {
     public class SaveBulletinFilter
     {
-        public int UserId { get; set; }
+        public string UserLik { get; set; }
 
         public string Data { get; set; }
 
