@@ -1,0 +1,29 @@
+﻿@model SendBulletinsToMixFilter
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html>
+<head>
+    <title>RsvpForm</title>
+</head>
+<body>
+    <form asp-controller="Mix" asp-action="SendBulletinsToMix" method="post">
+        <p>
+            <label asp-for="AdminLogin">login</label>
+            <input type="text" asp-for="AdminLogin">
+        </p>
+        <p>
+            <label asp-for="AdminPassword">password</label>
+            <input type="password" asp-for="AdminPassword">
+        </p>
+        <button type="submit">Submit</button>
+    </form>
+    @if(ViewData["error"] != null)
+    {
+        <div style="color: red">@ViewData["error"]</div>
+    }
+</body>
+</html>
+

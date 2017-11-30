@@ -52,26 +52,5 @@ namespace SHG.Controllers
                 return Ok();
             return BadRequest();
         }
-
-        [HttpGet("bulletin-board")]
-        public IActionResult BulletinBoard()
-        {
-            List<Bulletin> bulletins = electContext.Bulletins.ToList();
-            var LikHashList = new List<Object>();
-            HashAlgorithm algorithm = SHA1.Create();
-            foreach (Bulletin bulletin in bulletins)
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (byte b in algorithm.ComputeHash(Encoding.UTF8.GetBytes(bulletin.Data)))
-                    sb.Append(b.ToString("X2"));
-                LikHashList.Add(new
-                {
-                    LIK = bulletin.UserLik,
-                    VoteHash = sb.ToString()
-                }
-                );
-            }
-            return View("BulletinBoard");
-        }
     }
 }
